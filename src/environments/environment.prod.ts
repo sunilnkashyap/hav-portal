@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  serverUrl: 'http://api.healthaportal.com/api/v1'
+  serverUrl: 'http://api.healthavision.com/api/v1'
 };
