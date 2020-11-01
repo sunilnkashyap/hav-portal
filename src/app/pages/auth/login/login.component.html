@@ -1,48 +1,88 @@
 <div class="nk-block-head">
   <div class="nk-block-head-content">
-      <h5 class="nk-block-title">Sign-In</h5>
-      <div class="nk-block-des">
-          <p>Access the Health A Vision panel using your email and password.</p>
-      </div>
+    <h5 class="nk-block-title">Sign-In</h5>
+    <div class="nk-block-des">
+      <p>Access the Health A Vision panel using your email and password.</p>
+    </div>
   </div>
 </div>
-<form action="#">
+<form [formGroup]="form" (submit)="handleLogin()">
   <div class="form-group">
     <label class="form-label"><span>Account for</span></label>
     <div class="form-control-wrap">
-        <select class="form-control" data-search="off" data-ui="lg">
-            <option value="Patient">Patient</option>
-            <option value="Pathology">Pathology</option>
-            <option value="Doctor">Doctor</option>
-        </select>
+      <select class="form-control" data-search="off" data-ui="lg" formControlName="role">
+        <option value="Patient">Patient</option>
+        <option value="Pathology">Pathology</option>
+        <option value="Doctor">Doctor</option>
+      </select>
     </div>
-</div>
-  <div class="form-group">
-      <div class="form-label-group">
-          <label class="form-label" for="default-01">Email or Username</label>
-          <!-- <a class="link link-primary link-sm" tabindex="-1" href="#">Need Help?</a> -->
-      </div>
-      <input type="text" class="form-control form-control-lg" id="default-01" placeholder="Enter your email address or username">
   </div>
   <div class="form-group">
-      <div class="form-label-group">
-          <label class="form-label" for="password">Password</label>
-          <a class="link link-primary link-sm" tabindex="-1" href="javascript:void(0);" routerLink="/auth/forget-password">Forgot Password?</a>
-      </div>
-      <div class="form-control-wrap">
-          <a tabindex="-1" href="#" class="form-icon form-icon-right passcode-switch" data-target="password">
-              <em class="passcode-icon icon-show icon ni ni-eye"></em>
-              <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-          </a>
-          <input type="password" class="form-control form-control-lg" id="password" placeholder="Enter your Password">
-      </div>
+    <div class="form-label-group">
+      <label class="form-label" for="default-01">Email</label>
+    </div>
+    <input
+      type="text"
+      class="form-control form-control-lg"
+      formControlName="email"
+      placeholder="Enter your email address"
+    />
   </div>
-  
   <div class="form-group">
-      <button class="btn btn-lg btn-primary btn-block">Sign in</button>
+    <div class="form-label-group">
+      <label class="form-label" for="password">{{ isPasscode ? 'Passcode' : 'Password' }}</label>
+      <a
+        *ngIf="!isPasscode"
+        class="link link-primary link-sm"
+        tabindex="-1"
+        href="javascript:void(0);"
+        routerLink="/auth/forget-password">
+        Forgot Password?
+      </a>
+      <a
+        *ngIf="isPasscode"
+        class="link link-primary link-sm"
+        tabindex="-1"
+        href="javascript:void(0);"
+        (click)="sendPasscode()">
+        Send passcode to email.
+      </a>
+      
+    </div>
+    <div class="form-control-wrap">
+      <label *ngIf="isPasscode" class="form-label text-soft" style="font-size: 10px;margin: 0" for="password">Enter passcode which is sent to your email address.</label>
+      <a
+        tabindex="-1"
+        href="javascript:void(0)"
+        class="form-icon form-icon-right passcode-switch"
+        (click)="togglePassword()"
+      >
+        <em class="passcode-icon icon-show icon ni ni-eye"></em>
+        <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+      </a>
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        class="form-control form-control-lg"
+        id="password"
+        formControlName="password"
+        [placeholder]="isPasscode ? 'Enter Passcode' : 'Enter Password'"
+      />
+      <a
+        class="link link-primary link-sm"
+        tabindex="-1"
+        href="javascript:void(0);"
+        (click)="togglePasscode()">
+        Sign in with {{ isPasscode ? 'Password' : 'Passcode' }}.
+      </a>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <button type='submit' [disabled]="!form.valid" class="btn btn-lg btn-primary btn-block">Sign in</button>
   </div>
 </form>
-<div class="form-note-s2 pt-4"> New on our platform? <a routerLink='/auth/register'>Create an account</a>
+<div class="form-note-s2 pt-4">
+  New on our platform? <a routerLink="/auth/register">Create an account</a>
 </div>
 <div class="text-center pt-4 pb-3">
   <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
@@ -52,5 +92,9 @@
   <li class="nav-item"><a class="nav-link" href="#">Google</a></li>
 </ul>
 <div class="text-center mt-5">
-  <span class="fw-500">I don't have an account? <a href="javascript:void(0);" routerLink='/auth/register'>Try 15 days free</a></span>
+  <span class="fw-500">
+    I don't have an account?
+    <a href="javascript:void(0);" routerLink="/auth/register">
+      Try 15 days free</a>
+      </span>
 </div>
